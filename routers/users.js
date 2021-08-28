@@ -6,17 +6,7 @@ const jwt = require('jsonwebtoken');
 const { use } = require('./products');
 const {sendWelcomeEmail}= require('../email/account')
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, '/public/images')
-    },
-    filename: function (req, file, cb) {
-        const fileName = file.originalName.split(' ').join('-')
-      cb(null, fileName + '-' + Date.now())
-    }
-  })
-   
-  var upload = multer({ storage: storage })
+
 
 router.get(`/getAllUsers`, async (req, res) =>{ //"/getAllUsers"
     const userList = await User.find()
