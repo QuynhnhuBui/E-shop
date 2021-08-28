@@ -4,7 +4,21 @@ const router = express.Router();
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken');
 const { use } = require('./products');
-router.get(`/`, async (req, res) =>{
+const {sendWelcomeEmail}= require('../email/account')
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, '/public/images')
+    },
+    filename: function (req, file, cb) {
+        const fileName = file.originalName.split(' ').join('-')
+      cb(null, fileName + '-' + Date.now())
+    }
+  })
+   
+  var upload = multer({ storage: storage })
+
+router.get(`/getAllUsers`, async (req, res) =>{ //"/getAllUsers"
     const userList = await User.find()
     .select('-passwordHash');
 
@@ -15,7 +29,7 @@ router.get(`/`, async (req, res) =>{
 })
 
 
-router.get(`/:id`, async (req, res)=>{
+router.get(`/getProfile/:id`, async (req, res)=>{ //"/getProfile/:id"
     const user = await User.findById(req.params.id).select("-passwordHash")
     if (!user){
         res.status(500).json({
@@ -27,8 +41,8 @@ router.get(`/:id`, async (req, res)=>{
 })
 
 
-router.post(`/`, async (req, res)=>{
-    
+router.post(`/register`, async (req, res)=>{ //"/register"
+    //add check email and phone are unique
     let user = new User({
         name: req.body.name,
         email: req.body.email,
@@ -43,6 +57,7 @@ router.post(`/`, async (req, res)=>{
     })
 
     user = await user.save()
+    // sendWelcomeEmail(user.email,user.name)
     if (!user){
         return res.status(400).send({
             message: 'User cannot be created'
@@ -63,7 +78,8 @@ router.post('/login', async(req, res)=>{
     if (user && bcrypt.compareSync(req.body.password, user.passwordHash)){
         const token = jwt.sign(
             {
-            userId: user.id
+            userId: user.id,
+            isAdmin: user.isAdmin       
         },
         secret,
         {
@@ -77,6 +93,40 @@ router.post('/login', async(req, res)=>{
     } else {
         res.status(400).send('Incorrect password')
     }
+})
+
+router.get('/getUsers/count', async (req,res)=>{ //"getUsers"
+    const userCount = await User.countDocuments((count)=>{
+        count
+    })
+    if(!userCount){
+        res.status(500).json({success: false})
+    } 
+    res.send({
+        count: userCount     
+    })
+})
+
+router.delete('/deleteUser/:id', (req, res)=>{ //"/delete/id"
+    User.findByIdAndRemove(req.params.id).then((user)=>{
+        if(user){
+            return res.status(200).json({
+                success: true,
+                message: 'The user is deleted'
+            })
+        } else{
+            return res.status(404).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+    })
+    .catch((err)=>{
+        return res.status(400).json({
+            success: false,
+            error: err
+        })
+    })
 })
 
 module.exports =router;

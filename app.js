@@ -12,7 +12,7 @@ const api = process.env.API_URL
 const productRouter = require('./routers/products')
 const categoryRouter = require('./routers/categories')
 const userRouter = require('./routers/users')
-
+const orderRouter = require('./routers/orders')
 
 //middleware
 app.use(bodyParser.json())
@@ -27,6 +27,8 @@ app.use(errorHandler)
 app.use(`${api}/products`, productRouter)
 app.use(`${api}/categories`, categoryRouter)
 app.use(`${api}/users`, userRouter)
+app.use(`${api}/orders`, orderRouter)
+
 
 
 

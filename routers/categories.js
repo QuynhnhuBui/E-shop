@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 //get list category
-router.get(`/`, async (req, res) =>{
+router.get(`/getListCategory`, async (req, res) =>{
     const categoryList = await Category.find();
 
     if(!categoryList) {
@@ -12,7 +12,7 @@ router.get(`/`, async (req, res) =>{
     res.send(categoryList);
 })
 //get category by ID
-router.get('/:id', async (req,res)=>{
+router.get('/getCategory/:id', async (req,res)=>{
     const category = await Category.findById(req.params.id)
     if(!category){
         res.status(500).send({
@@ -23,7 +23,7 @@ router.get('/:id', async (req,res)=>{
     }
 })
 //add new
-router.post('/', async (req, res)=>{
+router.post('/addCategory', async (req, res)=>{
     let category = new Category({
         name: req.body.name,
         icon: req.body.icon,
@@ -42,7 +42,7 @@ router.post('/', async (req, res)=>{
 
 //api/v1/{id}
 //delete
-router.delete('/:id', (req, res)=>{
+router.delete('/deleteCategory/:id', (req, res)=>{
     Category.findByIdAndRemove(req.params.id).then((category)=>{
         if(category){
             return res.status(200).json({
@@ -65,7 +65,7 @@ router.delete('/:id', (req, res)=>{
 })
 
 //update category
-router.put('/:id', async (req, res)=>{
+router.put('/updateCategory/:id', async (req, res)=>{
     const category = await Category.findByIdAndUpdate(
         req.params.id,
         {

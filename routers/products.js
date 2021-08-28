@@ -4,7 +4,7 @@ const router = express.Router()
 const {Product} = require('../models/product')
 const {Category} = require('../models/category')
 const mongoose = require('mongoose')
-router.get(`/`, async (req, res)=>{
+router.get(`/getProductList`, async (req, res)=>{
     let filter = {}
     if (req.query.categories){
          filter = {category : req.query.categories.split(',')}
@@ -18,7 +18,7 @@ router.get(`/`, async (req, res)=>{
     res.send(productList)
 })
 
-router.get(`/:id`, async (req, res)=>{
+router.get(`/getProduct/:id`, async (req, res)=>{
     const product = await Product.findById(req.params.id).populate('category')
     if (!product){
         res.status(500).json({
@@ -28,7 +28,7 @@ router.get(`/:id`, async (req, res)=>{
     res.send(product)
 })
 
-router.post(`/`, async (req, res)=>{
+router.post(`/createProducts`, async (req, res)=>{
     const category = await Category.findById(req.body.category)
     if(!category){
         return res.status(400).send({
@@ -60,7 +60,7 @@ router.post(`/`, async (req, res)=>{
    
 })
 
-router.put('/:id', async (req, res)=>{
+router.put('/updateProduct/:id', async (req, res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
         res.status(400).send('Invalid Product ID')
     }
@@ -95,7 +95,7 @@ router.put('/:id', async (req, res)=>{
         }
 })
 
-router.delete('/:id', (req, res)=>{
+router.delete('/deleteProduct/:id', (req, res)=>{
     Product.findByIdAndRemove(req.params.id).then((product)=>{
         if(product){
             return res.status(200).json({
@@ -118,7 +118,7 @@ router.delete('/:id', (req, res)=>{
 })
 
 //totalProduct
-router.get('/get/count', async (req,res)=>{
+router.get('/getProducts/count', async (req,res)=>{
     const productCount = await Product.countDocuments((count)=>{
         count
     })
