@@ -54,7 +54,7 @@ router.get(`/searchProduct`, async (req, res) => {
     var regex = RegExp("/.*" + filter + ".*/")
 
 
-    const productList = await Product.find({name: new RegExp('.*' + filter.toLowerCase() + '.*')});
+    const productList = await Product.find({name: new RegExp('.*' + filter + '.*','i')});
     if (!productList) {
       res.status(500).json({
         success: false,
