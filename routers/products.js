@@ -48,7 +48,24 @@ res.status(200).json({
     productList
   });
 });
+router.get(`/searchProduct`, async (req, res) => {
+    
+    let filter = req.query.search ? req.query.search :'';
+    var regex = RegExp("/.*" + filter + ".*/")
 
+
+    const productList = await Product.find({name: new RegExp('.*' + filter.toLowerCase() + '.*')});
+    if (!productList) {
+      res.status(500).json({
+        success: false,
+      });
+    }
+  //   res.send(productList);
+  res.status(200).json({
+      success: true,
+      productList
+    });
+  });
 router.get(`/getProduct/:id`, async (req, res) => {
   const product = await Product.findById(req.params.id).populate("category");
   if (!product) {
