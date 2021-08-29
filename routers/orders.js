@@ -10,7 +10,8 @@ router.get(`/getOrderList`, async (req, res) => {
   if (!orderList) {
     res.status(500).json({ success: false });
   }
-  res.send(orderList);
+  // res.send(orderList);
+  res.json({success: true, orderList})
 });
 
 
@@ -20,7 +21,7 @@ router.get(`/getOrderById/:id`, async (req, res) => {
     if (!order) {
       res.status(500).json({ success: false });
     }
-    res.send(order);
+    res.json({success: true, order});
   });
 
 router.post("/createOrder", async (req, res) => {
@@ -44,7 +45,6 @@ router.post("/createOrder", async (req, res) => {
   }))
 
   const totalPrice = totalPrices.reduce((a,b)=> a+b,0)
-  console.log(222,totalPrice)
 
   let order = new Order({
     user: req.body.user,
@@ -64,7 +64,8 @@ router.post("/createOrder", async (req, res) => {
   if (!order) {
     return res.status(404).send("The order cannot be created");
   } else {
-    res.status(200).send(order);
+    // res.status(200).send(order);
+    res.json({success: true, order})
   }
 });
 
@@ -81,6 +82,7 @@ router.put('/updateStatus/:id', async (req, res)=>{
             return res.status(400).send('The status cannot be updated')
         } else {
             res.status(200).send(order)
+
         }
 })
 

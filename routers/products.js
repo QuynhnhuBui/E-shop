@@ -42,7 +42,11 @@ router.get(`/getProductList`, async (req, res) => {
       success: false,
     });
   }
-  res.send(productList);
+//   res.send(productList);
+res.status(200).json({
+    success: true,
+    productList
+  });
 });
 
 router.get(`/getProduct/:id`, async (req, res) => {
@@ -52,7 +56,8 @@ router.get(`/getProduct/:id`, async (req, res) => {
       success: false,
     });
   }
-  res.send(product);
+//   res.send(product);
+res.status(200).json({success: true, product})
 });
 
 router.post(`/createProducts`, upload.single("image"), async (req, res) => {
@@ -60,6 +65,7 @@ router.post(`/createProducts`, upload.single("image"), async (req, res) => {
   if (!category) {
     return res.status(400).send({
       message: "Invalid category",
+      success: false
     });
   }
 
@@ -67,11 +73,11 @@ router.post(`/createProducts`, upload.single("image"), async (req, res) => {
   if (!file) {
     return res.status(400).send({
       message: "Invalid image",
+      success: false
     });
   }
   const fileName = req.file.filename;
   const imagePath = `${req.protocol}://${req.get("host")}/public/images/`;
-  console.log(111, req.file);
   let product = new Product({
     name: req.body.name,
     description: req.body.description,
@@ -89,10 +95,15 @@ router.post(`/createProducts`, upload.single("image"), async (req, res) => {
   product = await product.save();
   if (!product) {
     return res.status(400).send({
+        success: false,
       message: "Product cannot be created",
     });
   } else {
-    return res.send(product);
+    return  res.status(400).send({
+        success: true,
+    //   message: "Product cannot be created",
+    product
+    });
   }
 });
 
@@ -105,6 +116,7 @@ router.put("/updateProduct/:id", upload.single("image"), async (req, res) => {
   if (!category) {
     return res.status(400).send({
       message: "Invalid category",
+      success: false
     });
   }
 
@@ -112,6 +124,7 @@ router.put("/updateProduct/:id", upload.single("image"), async (req, res) => {
   if (!product) {
     return res.status(400).send({
       message: "Invalid product",
+      success: false
     });
   }
 
@@ -142,9 +155,15 @@ router.put("/updateProduct/:id", upload.single("image"), async (req, res) => {
     { new: true }
   );
   if (!updatedProduct) {
-    return res.status(500).send("The category cannot be updated");
+    return res.status(500).json({
+        success: false,
+        message: 'Catefory cannot be updated'
+    });
   } else {
-    res.status(200).send(updatedProduct);
+    res.status(200).json({
+        success: true,
+        updatedProduct
+    });
   }
 });
 
@@ -179,8 +198,9 @@ router.get("/getProducts/count", async (req, res) => {
   if (!productCount) {
     res.status(500).json({ success: false });
   }
-  res.send({
+  res.json({
     count: productCount,
+    success: true
   });
 });
 
@@ -192,8 +212,9 @@ router.get("/get/featured/:count", async (req, res) => {
   if (!featuredProduct) {
     res.status(500).json({ success: false });
   }
-  res.send({
+  res.json({
     count: featuredProduct,
+    success: true
   });
 });
 
@@ -221,7 +242,11 @@ router.put(
     if (!product) {
       return res.status(500).send("The images cannot be updated");
     } else {
-      res.status(200).send(product);
+    //   res.status(200).send(product);
+    res.status(200).json({
+        success: true,
+        product
+    })
     }
   }
 );
