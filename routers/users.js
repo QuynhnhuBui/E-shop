@@ -63,7 +63,7 @@ router.post('/login', async(req, res)=>{
     const secret = process.env.secret
 
     if (!user){
-        return res.status(400).send('User not found')
+        return res.status(400).json({message:'User not found', success: false})
     } 
     if (user && bcrypt.compareSync(req.body.password, user.passwordHash)){
         const token = jwt.sign(
@@ -78,10 +78,11 @@ router.post('/login', async(req, res)=>{
         )
         res.status(200).send({
             user: user.email,
-            token: token
+            token: token,
+            success: true
         })
     } else {
-        res.status(400).send('Incorrect password')
+        res.status(400).json({message:'Incorrect email or password', success: false})
     }
 })
 
