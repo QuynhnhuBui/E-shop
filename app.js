@@ -26,13 +26,12 @@ app.use(errorHandler)
 
 //Routers
 app.use(`${api}/products`, productRouter)
-// app.use(`${api}/categories`, categoryRouter)
 app.use(`${api}/users`, userRouter)
 app.use(`${api}/orders`, orderRouter)
 app.use(`${api}/categories`, categoryRouter);
 
 
-
+app.disable('etag')
 
 
 
