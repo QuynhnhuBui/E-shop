@@ -15,7 +15,7 @@ router.get(`/getListCategory`, async (req, res) =>{
 router.get('/getCategory/:id', async (req,res)=>{
     const category = await Category.findById(req.params.id)
     if(!category){
-        res.status(500).send({
+        res.status(500).send({ 
             message:'The category with given ID not found'
         })
     } else {
@@ -23,7 +23,7 @@ router.get('/getCategory/:id', async (req,res)=>{
     }
 })
 //add new
-router.post('/addCategory', async (req, res)=>{
+router.post('/addCategory', async (req, res)=>{ 
     let category = new Category({
         name: req.body.name,
         icon: req.body.icon,

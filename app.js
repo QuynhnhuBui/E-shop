@@ -15,7 +15,7 @@ const userRouter = require('./routers/users')
 const orderRouter = require('./routers/orders')
 
 //middleware
-app.use(bodyParser.json())
+app.use(bodyParser.json()) 
 app.use(morgan('tiny'))
 app.use(cors())
 app.options('*',cors() )
@@ -26,9 +26,10 @@ app.use(errorHandler)
 
 //Routers
 app.use(`${api}/products`, productRouter)
-app.use(`${api}/categories`, categoryRouter)
+// app.use(`${api}/categories`, categoryRouter)
 app.use(`${api}/users`, userRouter)
 app.use(`${api}/orders`, orderRouter)
+app.use(`${api}/categories`, categoryRouter);
 
 
 
