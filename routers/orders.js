@@ -34,7 +34,7 @@ router.post("/createOrder", async (req, res) => {
       newOrderItem = await newOrderItem.save();
 
       return newOrderItem._id;
-    })
+    }) 
   );
   const resolvedOrderItemIds = await orderItemIds;
 
@@ -44,7 +44,7 @@ router.post("/createOrder", async (req, res) => {
     return totalPrice
   }))
 
-  const totalPrice = totalPrices.reduce((a,b)=> a+b,0)
+  const totalPrice = totalPrices.reduce((a,b)=> a+b,0) 
 
   let order = new Order({
     user: req.body.user,

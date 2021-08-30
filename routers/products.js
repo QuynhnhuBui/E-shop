@@ -174,7 +174,7 @@ router.put("/updateProduct/:id", upload.single("image"), async (req, res) => {
   if (!updatedProduct) {
     return res.status(500).json({
         success: false,
-        message: 'Catefory cannot be updated'
+        message: 'Product cannot be updated'
     });
   } else {
     res.status(200).json({
