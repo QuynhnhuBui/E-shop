@@ -73,7 +73,6 @@ router.put('/updateStatus/:id', async (req, res)=>{
     const order = await Order.findByIdAndUpdate(
         req.params.id,
         {
-            
             status: req.body.status
         },
         {new: true}
@@ -81,7 +80,7 @@ router.put('/updateStatus/:id', async (req, res)=>{
         if (!order){
             return res.status(400).send('The status cannot be updated')
         } else {
-            res.status(200).send(order)
+            res.status(200).json({success: true, order})
 
         }
 })

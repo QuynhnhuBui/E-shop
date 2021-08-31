@@ -119,7 +119,7 @@ router.post(`/createProducts`, upload.single("image"), async (req, res) => {
   } else {
     return  res.status(200).json({
         success: true,
-    //   message: "Product cannot be created",
+    
     product
     });
   }
@@ -145,7 +145,7 @@ router.put("/updateProduct/:id", upload.single("image"), async (req, res) => {
       success: false
     });
   }
-
+ 
   const file = req.file;
   let path;
   if (file) {
@@ -179,8 +179,9 @@ router.put("/updateProduct/:id", upload.single("image"), async (req, res) => {
     });
   } else {
     res.status(200).json({
+       
+        updatedProduct,
         success: true,
-        updatedProduct
     });
   }
 });
