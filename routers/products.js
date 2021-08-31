@@ -78,9 +78,10 @@ res.status(200).json({success: true, product})
 });
 
 router.post(`/createProducts`, upload.single("image"), async (req, res) => {
+  console.log(111,req.body)
   const category = await Category.findById(req.body.category);
   if (!category) {
-    return res.status(400).send({
+    return res.status(400).json({
       message: "Invalid category",
       success: false
     });
@@ -88,7 +89,7 @@ router.post(`/createProducts`, upload.single("image"), async (req, res) => {
 
   const file = req.file;
   if (!file) {
-    return res.status(400).send({
+    return res.status(400).json({
       message: "Invalid image",
       success: false
     });
@@ -111,12 +112,12 @@ router.post(`/createProducts`, upload.single("image"), async (req, res) => {
 
   product = await product.save();
   if (!product) {
-    return res.status(400).send({
+    return res.status(400).json({
         success: false,
       message: "Product cannot be created",
     });
   } else {
-    return  res.status(400).send({
+    return  res.status(200).json({
         success: true,
     //   message: "Product cannot be created",
     product
